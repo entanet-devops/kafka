@@ -1,0 +1,16 @@
+---
+- name: Install Pear and Kafka dependencies.
+  apt:
+    name:
+      - php-pear
+      - librdkafka1
+      - librdkafka-dev
+    state: present
+
+- name: Install Rdkafka.
+  command: pecl install rdkafka
+
+- lineinfile:
+    path: /etc/php/{{ php_version }}/cli/php.ini
+    line: 'extension=rdkafka.so'
+  notify: restart php-fpm
