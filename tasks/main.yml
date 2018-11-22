@@ -8,15 +8,18 @@
     state: present
 
 - name: Install Rdkafka.
-  command: pecl install rdkafka
+  pear:
+    name: pecl/rdkafka
+    state: present
 
 - name: Put rdkafka in cli php.ini
   lineinfile:
     path: /etc/php/{{ php_version }}/cli/php.ini
     line: 'extension=rdkafka.so'
 
-- name: check if php-fpm is installed
-  shell: apt -qq list php{{ php_version }}-fpm
+- name: check for php fpm directory
+  stat:
+    path: /etc/php/{{ php_version }}/fpm/php.ini
   register: php_fpm_installed
 
 - name: Put rdkafka in fpm php.ini
@@ -24,4 +27,4 @@
    path: /etc/php/{{ php_version }}/fpm/php.ini
    line: 'extension=rdkafka.so' 
   notify: restart php-fpm
-  when: php_fpm_installed.stdout != ""
+  when: php_fpm_installed.stat.exists == true
