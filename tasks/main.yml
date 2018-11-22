@@ -10,7 +10,18 @@
 - name: Install Rdkafka.
   command: pecl install rdkafka
 
-- lineinfile:
+- name: Put rdkafka in cli php.ini
+  lineinfile:
     path: /etc/php/{{ php_version }}/cli/php.ini
     line: 'extension=rdkafka.so'
+
+- name: check if php-fpm is installed
+  shell: apt -qq list php{{ php_version }}-fpm
+  register: php_fpm_installed
+
+- name: Put rdkafka in fpm php.ini
+  lineinfile:
+   path: /etc/php/{{ php_version }}/fpm/php.ini
+   line: 'extension=rdkafka.so' 
   notify: restart php-fpm
+  when: php_fpm_installed.stdout != ""
