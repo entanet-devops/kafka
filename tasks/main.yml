@@ -7,10 +7,8 @@
       - librdkafka-dev
     state: present
 
-- name: Install Rdkafka.
-  pear:
-    name: pecl/rdkafka
-    state: present
+- name: Install Kafka 3.1.2
+  shell: pecl install rdkafka-3.1.2
 
 - name: Put rdkafka in cli php.ini
   lineinfile:
