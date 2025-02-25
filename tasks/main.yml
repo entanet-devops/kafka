@@ -5,6 +5,7 @@
       - php-pear
       - librdkafka1
       - librdkafka-dev
+      - build-essential
     state: present
 
 - name: Install rdkafa
